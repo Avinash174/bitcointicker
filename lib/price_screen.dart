@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'coin_data.dart';
+import 'dart:io' show Platform;
 
 class PriceScreen extends StatefulWidget {
   @override
@@ -9,7 +11,7 @@ class PriceScreen extends StatefulWidget {
 class _PriceScreenState extends State<PriceScreen> {
   String selectCurrency = "INR";
 
-  List<DropdownMenuItem<String>> getdropDownItem() {
+  DropdownButton<String> androoidDropDown() {
     List<DropdownMenuItem<String>> dropDownIntem = [];
     for (String currency in currenciesList) {
       var newItem = DropdownMenuItem(
@@ -18,12 +20,45 @@ class _PriceScreenState extends State<PriceScreen> {
       );
       dropDownIntem.add(newItem);
     }
-    return dropDownIntem;
+
+    return DropdownButton<String>(
+      value: selectCurrency,
+      items: dropDownIntem,
+      onChanged: (Object? value) {
+        setState(() {
+          selectCurrency = value.toString();
+        });
+      },
+    );
   }
+
+  CupertinoPicker iOSPicker() {
+    List<Text> pickerItem = [];
+
+    for (String currecy in currenciesList) {
+      pickerItem.add(Text(currecy));
+    }
+    return CupertinoPicker(
+      backgroundColor: Colors.lightBlue,
+      itemExtent: 32.0,
+      onSelectedItemChanged: (selectedIndex) {
+        print(selectedIndex);
+      },
+      children: pickerItem,
+    );
+  }
+
+  // Widget getDevice() {
+  //   if (Platform.isAndroid) {
+  //     return androoidDropDown();
+  //   } else if (Platform.isIOS) {
+  //     return iOSPicker();
+  //   }
+  //   return getDevice();
+  // }
 
   @override
   Widget build(BuildContext context) {
-    getdropDownItem();
     return Scaffold(
       appBar: AppBar(
         title: const Text('🤑 Coin Ticker'),
@@ -54,21 +89,12 @@ class _PriceScreenState extends State<PriceScreen> {
             ),
           ),
           Container(
-            height: 150.0,
-            alignment: Alignment.center,
-            padding: EdgeInsets.only(bottom: 30.0),
-            color: Colors.lightBlue,
-            // ignore: prefer_const_literals_to_create_immutables
-            child: DropdownButton<String>(
-              value: selectCurrency,
-              items: getdropDownItem(),
-              onChanged: (Object? value) {
-                setState(() {
-                  selectCurrency = value.toString();
-                });
-              },
-            ),
-          ),
+              height: 150.0,
+              alignment: Alignment.center,
+              padding: EdgeInsets.only(bottom: 30.0),
+              color: Colors.lightBlue,
+              // ignore: prefer_const_literals_to_create_immutables
+              child: Platform.isIOS ? iOSPicker() : androoidDropDown()),
         ],
       ),
     );
