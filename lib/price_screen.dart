@@ -9,11 +9,9 @@ class PriceScreen extends StatefulWidget {
 class _PriceScreenState extends State<PriceScreen> {
   String selectCurrency = "INR";
 
-  List<DropdownMenuItem> getDropDownItem() {
+  List<DropdownMenuItem<String>> getdropDownItem() {
     List<DropdownMenuItem<String>> dropDownIntem = [];
-    for (int i = 0; i < currenciesList.length; i++) {
-      String currency = currenciesList[i];
-
+    for (String currency in currenciesList) {
       var newItem = DropdownMenuItem(
         child: Text(currency),
         value: currency,
@@ -25,7 +23,7 @@ class _PriceScreenState extends State<PriceScreen> {
 
   @override
   Widget build(BuildContext context) {
-    getDropDownItem();
+    getdropDownItem();
     return Scaffold(
       appBar: AppBar(
         title: const Text('🤑 Coin Ticker'),
@@ -63,7 +61,7 @@ class _PriceScreenState extends State<PriceScreen> {
             // ignore: prefer_const_literals_to_create_immutables
             child: DropdownButton<String>(
               value: selectCurrency,
-              items: getDropDownItem(),
+              items: getdropDownItem(),
               onChanged: (Object? value) {
                 setState(() {
                   selectCurrency = value.toString();
